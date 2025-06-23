@@ -1,0 +1,24 @@
+{
+  "source": "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 423
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 595
+        }
+      }
+    ]
+  },
+  "version": 1
+}

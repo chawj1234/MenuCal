@@ -1,0 +1,38 @@
+{
+  "" : {
+    "diagnostics" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCal-master.dia",
+    "emit-module-dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCal-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCal-master-emit-module.dia",
+    "swift-dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCal-master.swiftdeps"
+  },
+  "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/ContentView.swift" : {
+    "const-values" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.dia",
+    "index-unit-output-path" : "/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/ContentView~partial.swiftmodule"
+  },
+  "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/menuCalApp.swift" : {
+    "const-values" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.swiftconstvalues",
+    "dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.d",
+    "diagnostics" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.dia",
+    "index-unit-output-path" : "/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.o",
+    "llvm-bc" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.bc",
+    "object" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.o",
+    "swift-dependencies" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp.swiftdeps",
+    "swiftmodule" : "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/menuCal.build/Debug/menuCal.build/Objects-normal/x86_64/menuCalApp~partial.swiftmodule"
+  }
+}

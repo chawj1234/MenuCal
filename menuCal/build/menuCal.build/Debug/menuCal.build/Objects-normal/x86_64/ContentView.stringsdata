@@ -1,0 +1,32 @@
+{
+  "source": "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "날씨 정보 로딩 중...",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 398
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 514
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 580
+        }
+      }
+    ]
+  },
+  "version": 1
+}
