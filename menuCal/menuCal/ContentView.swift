@@ -432,14 +432,14 @@ struct CalendarView: View {
             
             // 날씨 정보
             VStack(spacing: 4) {
-                // 선택된 날짜 표시
+                // 위치 정보
                 HStack {
-                    Image(systemName: "calendar")
+                    Image(systemName: "location.fill")
                         .font(.system(size: 10))
                         .foregroundColor(.secondary)
                     
-                    Text(selectedDateString)
-                        .font(.system(size: 10, weight: .medium))
+                    Text(weatherManager.locationName)
+                        .font(.system(size: 10))
                         .foregroundColor(.secondary)
                     
                     Spacer()
@@ -471,19 +471,6 @@ struct CalendarView: View {
                     .font(.caption)
                     .foregroundColor(.blue)
                     .buttonStyle(PlainButtonStyle())
-                }
-                
-                // 위치 정보
-                HStack {
-                    Image(systemName: "location.fill")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                    
-                    Text(weatherManager.locationName)
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                    
-                    Spacer()
                 }
             }
             .padding(.horizontal, 12)
