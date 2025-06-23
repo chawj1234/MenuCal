@@ -24,65 +24,130 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     private var currentLocation: CLLocation?
     
     override init() {
+        print("🚀 [Init] SimpleWeatherManager 초기화 시작")
         super.init()
         setupLocationManager()
         requestLocation()
+        print("🚀 [Init] SimpleWeatherManager 초기화 완료")
     }
     
     private func setupLocationManager() {
+        print("⚙️ [Setup] LocationManager 설정 시작")
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        print("⚙️ [Setup] LocationManager 설정 완료 - 정확도: \(locationManager.desiredAccuracy)")
     }
     
     func requestLocation() {
+        print("🔍 [Location] requestLocation() 시작")
         isLoading = true
-        locationName = "위치 확인 중..."
+        locationName = NSLocalizedString("Locating...", comment: "Location loading text")
+        
+        let authStatus = locationManager.authorizationStatus
+        print("🔍 [Location] 현재 권한 상태: \(authStatus.rawValue) (\(authStatusString(authStatus)))")
         
         // 위치 권한 확인 및 요청
-        switch locationManager.authorizationStatus {
+        switch authStatus {
         case .notDetermined:
+            print("🔍 [Location] 권한 미결정 -> 권한 요청")
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
+            print("🔍 [Location] 권한 승인됨 -> 위치 요청")
             locationManager.requestLocation()
         case .denied, .restricted:
-            // 권한이 거부된 경우 서울 날씨로 폴백
-            loadSeoulWeather()
+            print("🔍 [Location] 권한 거부됨 -> 에러 표시")
+            showLocationError()
         @unknown default:
-            loadSeoulWeather()
+            print("🔍 [Location] 알 수 없는 권한 상태 -> 에러 표시")
+            showLocationError()
         }
     }
     
     // CLLocationManagerDelegate 메서드들
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("🔍 [Location] didUpdateLocations 호출됨")
+        print("🔍 [Location] 받은 위치 개수: \(locations.count)")
+        
         guard let location = locations.first else {
-            loadSeoulWeather()
+            print("🔍 [Location] 위치 정보 없음 -> 에러 표시")
+            showLocationError()
             return
         }
+        
+        print("🔍 [Location] 위치 정보 획득: 위도 \(location.coordinate.latitude), 경도 \(location.coordinate.longitude)")
+        print("🔍 [Location] 정확도: \(location.horizontalAccuracy)m")
         
         currentLocation = location
         loadWeather(for: location, date: Date())
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("위치 가져오기 실패: \(error.localizedDescription)")
-        loadSeoulWeather()
+        print("❌ [Location] 위치 가져오기 실패: \(error.localizedDescription)")
+        print("❌ [Location] 에러 타입: \(type(of: error))")
+        if let clError = error as? CLError {
+            print("❌ [Location] CLError 코드: \(clError.code.rawValue)")
+        }
+        showLocationError()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("🔍 [Location] 권한 상태 변경: \(status.rawValue) (\(authStatusString(status)))")
+        
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
+            print("🔍 [Location] 권한 승인됨 -> 위치 요청")
             locationManager.requestLocation()
         case .denied, .restricted:
-            loadSeoulWeather()
+            print("🔍 [Location] 권한 거부됨 -> 에러 표시")
+            showLocationError()
         default:
+            print("🔍 [Location] 대기 중...")
             break
         }
+    }
+    
+    // 권한 상태를 문자열로 변환하는 헬퍼 함수
+    private func authStatusString(_ status: CLAuthorizationStatus) -> String {
+        switch status {
+        case .notDetermined:
+            return "notDetermined"
+        case .restricted:
+            return "restricted"
+        case .denied:
+            return "denied"
+        case .authorizedAlways:
+            return "authorizedAlways"
+        case .authorizedWhenInUse:
+            return "authorizedWhenInUse"
+        @unknown default:
+            return "unknown"
+        }
+    }
+    
+    // 위치 에러 표시
+    private func showLocationError() {
+        isLoading = false
+        locationName = NSLocalizedString("Location Failed", comment: "Location failed text")
+        temperature = "?"
+        condition = NSLocalizedString("Location permission required", comment: "Location permission required text")
+        weatherIcon = "location.slash"
+        iconColor = .red
+    }
+    
+    // 날씨 에러 표시
+    private func showWeatherError() {
+        isLoading = false
+        temperature = "?"
+        condition = NSLocalizedString("Unable to fetch weather data", comment: "Weather fetch error text")
+        weatherIcon = "exclamationmark.triangle"
+        iconColor = .orange
     }
     
     // 선택된 날짜의 날씨 가져오기
     func loadWeatherForDate(_ date: Date) {
         guard let location = currentLocation else {
-            loadSeoulWeatherForDate(date)
+            print("❌ [Weather] 현재 위치 정보 없음")
+            showLocationError()
             return
         }
         
@@ -90,60 +155,78 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     }
     
     private func loadWeather(for location: CLLocation, date: Date) {
+        print("🌤️ [Weather] loadWeather 시작 - 위치: (\(location.coordinate.latitude), \(location.coordinate.longitude))")
         isLoading = true
         
         Task {
             do {
+                print("🌤️ [Weather] WeatherKit API 호출 중...")
                 let weather = try await weatherService.weather(for: location)
+                print("🌤️ [Weather] WeatherKit API 호출 성공")
+                
+                // dailyForecast에 있는 모든 날짜 확인
+                print("🌤️ [Weather] dailyForecast 데이터 분석:")
+                for (index, forecast) in weather.dailyForecast.enumerated() {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    print("🌤️ [Weather] dailyForecast[\(index)]: \(dateFormatter.string(from: forecast.date)) (\(forecast.condition.description))")
+                }
                 
                 // 오늘인지 미래 날짜인지 확인
                 let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
                 let isFutureDate = date > Date()
                 
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                print("🌤️ [Weather] 선택된 날짜: \(dateFormatter.string(from: date)) - 오늘: \(isToday), 미래: \(isFutureDate)")
+                
                 if isToday {
                     // 오늘 날씨 (현재 날씨)
+                    print("🌤️ [Weather] 현재 날씨 적용 - 온도: \(weather.currentWeather.temperature.value)°")
                     updateWeatherUI(
                         temperature: Int(weather.currentWeather.temperature.value),
                         condition: weather.currentWeather.condition,
                         date: date
                     )
-                } else if isFutureDate {
-                    // 미래 날짜 예보
+                } else {
+                    // 과거 또는 미래 날짜 - dailyForecast에서 찾기
                     if let dailyForecast = weather.dailyForecast.first(where: { forecast in
                         Calendar.current.isDate(forecast.date, inSameDayAs: date)
                     }) {
                         let avgTemp = (dailyForecast.highTemperature.value + dailyForecast.lowTemperature.value) / 2
+                        let dateType = isFutureDate ? "미래 예보" : "과거 기록"
+                        print("🌤️ [Weather] \(dateType) 날씨 적용 - 고온: \(dailyForecast.highTemperature.value)°, 저온: \(dailyForecast.lowTemperature.value)°, 평균: \(avgTemp)°")
                         updateWeatherUI(
                             temperature: Int(avgTemp),
                             condition: dailyForecast.condition,
                             date: date
                         )
                     } else {
-                        // 예보 데이터가 없는 경우
+                        // 데이터가 없는 경우
+                        let dateType = isFutureDate ? "예보" : "과거 기록"
+                        print("🌤️ [Weather] \(dateType) 데이터 없음")
                         self.temperature = "?"
-                        self.condition = NSLocalizedString("No Forecast", comment: "No weather forecast available")
-                        self.weatherIcon = "questionmark"
+                        self.condition = isFutureDate ? 
+                            NSLocalizedString("No forecast data", comment: "No forecast data available") :
+                            NSLocalizedString("No historical data", comment: "No historical weather data available")
+                        self.weatherIcon = isFutureDate ? "questionmark" : "clock"
                         self.iconColor = .secondary
+                        self.isLoading = false
                     }
-                } else {
-                    // 과거 날짜 (현재 날씨로 대체)
-                    updateWeatherUI(
-                        temperature: Int(weather.currentWeather.temperature.value),
-                        condition: weather.currentWeather.condition,
-                        date: date
-                    )
                 }
                 
                 // 위치명 가져오기 (처음 한 번만)
-                if locationName == NSLocalizedString("Locating...", comment: "Location loading text") {
+                if locationName == "위치 확인 중..." || locationName == NSLocalizedString("Locating...", comment: "Location loading text") {
+                    print("🌤️ [Weather] 위치명 역지오코딩 시작")
                     getLocationName(for: location)
                 }
                 
                 self.isLoading = false
+                print("🌤️ [Weather] loadWeather 완료")
             } catch {
-                print("날씨 가져오기 실패: \(error.localizedDescription)")
-                // WeatherKit 실패 시 서울로 폴백
-                loadSeoulWeatherForDate(date)
+                print("❌ [Weather] WeatherKit API 실패: \(error.localizedDescription)")
+                print("❌ [Weather] 에러 타입: \(type(of: error))")
+                showWeatherError()
             }
         }
     }
@@ -157,81 +240,150 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
         self.iconColor = iconInfo.color
     }
     
-    private func loadSeoulWeather() {
-        loadSeoulWeatherForDate(Date())
-    }
-    
-    private func loadSeoulWeatherForDate(_ date: Date) {
-        locationName = NSLocalizedString("Seoul", comment: "Seoul city name")
-        let seoulLocation = CLLocation(latitude: 37.5665, longitude: 126.9780)
-        currentLocation = seoulLocation
-        
-        Task {
-            do {
-                let weather = try await weatherService.weather(for: seoulLocation)
-                
-                let isToday = Calendar.current.isDate(date, inSameDayAs: Date())
-                let isFutureDate = date > Date()
-                
-                if isToday {
-                    updateWeatherUI(
-                        temperature: Int(weather.currentWeather.temperature.value),
-                        condition: weather.currentWeather.condition,
-                        date: date
-                    )
-                } else if isFutureDate {
-                    if let dailyForecast = weather.dailyForecast.first(where: { forecast in
-                        Calendar.current.isDate(forecast.date, inSameDayAs: date)
-                    }) {
-                        let avgTemp = (dailyForecast.highTemperature.value + dailyForecast.lowTemperature.value) / 2
-                        updateWeatherUI(
-                            temperature: Int(avgTemp),
-                            condition: dailyForecast.condition,
-                            date: date
-                        )
-                    } else {
-                        self.temperature = "?"
-                        self.condition = NSLocalizedString("No Forecast", comment: "No weather forecast available")
-                        self.weatherIcon = "questionmark"
-                        self.iconColor = .secondary
-                    }
-                } else {
-                    updateWeatherUI(
-                        temperature: Int(weather.currentWeather.temperature.value),
-                        condition: weather.currentWeather.condition,
-                        date: date
-                    )
-                }
-                
-                self.isLoading = false
-            } catch {
-                // 최후의 폴백
-                self.temperature = "25°"
-                self.condition = NSLocalizedString("Clear", comment: "Weather condition: clear")
-                self.weatherIcon = "sun.max.fill"
-                self.iconColor = .orange
-                self.isLoading = false
-            }
-        }
-    }
-    
     private func getLocationName(for location: CLLocation) {
+        print("📍 [Geocoding] 역지오코딩 시작 - 위치: (\(location.coordinate.latitude), \(location.coordinate.longitude))")
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
-            DispatchQueue.main.async {
-                if let placemark = placemarks?.first {
-                    self?.locationName = placemark.locality ?? 
-                                       placemark.administrativeArea ?? 
-                                       NSLocalizedString("Current Location", comment: "Current location text")
-                } else {
-                    self?.locationName = NSLocalizedString("Current Location", comment: "Current location text")
-                }
+        
+        // 영어 로케일로 역지오코딩 시도
+        if #available(macOS 11.0, *) {
+            geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "en_US")) { [weak self] placemarks, error in
+                self?.handleGeocodeResult(placemarks: placemarks, error: error, isEnglish: true)
+            }
+        } else {
+            // macOS 11 미만에서는 기본 로케일 사용 후 번역
+            geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
+                self?.handleGeocodeResult(placemarks: placemarks, error: error, isEnglish: false)
             }
         }
     }
     
-    func refreshWeather() {
-        requestLocation()
+    private func handleGeocodeResult(placemarks: [CLPlacemark]?, error: Error?, isEnglish: Bool) {
+        DispatchQueue.main.async {
+            if let error = error {
+                print("❌ [Geocoding] 역지오코딩 실패: \(error.localizedDescription)")
+                self.locationName = NSLocalizedString("Current Location", comment: "Current location text")
+                return
+            }
+            
+            if let placemark = placemarks?.first {
+                let originalLocationName = placemark.locality ?? 
+                                           placemark.administrativeArea ?? 
+                                           NSLocalizedString("Current Location", comment: "Current location text")
+                
+                let finalLocationName: String
+                if isEnglish {
+                    // 이미 영어로 받았으므로 그대로 사용
+                    finalLocationName = originalLocationName
+                    print("📍 [Geocoding] 영어 위치명 획득: \(originalLocationName)")
+                } else {
+                    // 한국어로 받았으므로 번역 시도
+                    finalLocationName = self.translateLocationToEnglish(originalLocationName)
+                    print("📍 [Geocoding] 위치명 번역: \(originalLocationName) -> \(finalLocationName)")
+                }
+                
+                self.locationName = finalLocationName
+            } else {
+                print("📍 [Geocoding] 위치명 정보 없음")
+                self.locationName = NSLocalizedString("Current Location", comment: "Current location text")
+            }
+        }
+    }
+    
+    // 한국어 위치명을 영어로 번역하는 함수
+    private func translateLocationToEnglish(_ koreanLocation: String) -> String {
+        let locationMap: [String: String] = [
+            // 서울 지역
+            "서울특별시": "Seoul",
+            "서울시": "Seoul",
+            "서울": "Seoul",
+            "강남구": "Gangnam-gu",
+            "강동구": "Gangdong-gu",
+            "강북구": "Gangbuk-gu",
+            "강서구": "Gangseo-gu",
+            "관악구": "Gwanak-gu",
+            "광진구": "Gwangjin-gu",
+            "구로구": "Guro-gu",
+            "금천구": "Geumcheon-gu",
+            "노원구": "Nowon-gu",
+            "도봉구": "Dobong-gu",
+            "동대문구": "Dongdaemun-gu",
+            "동작구": "Dongjak-gu",
+            "마포구": "Mapo-gu",
+            "서대문구": "Seodaemun-gu",
+            "서초구": "Seocho-gu",
+            "성동구": "Seongdong-gu",
+            "성북구": "Seongbuk-gu",
+            "송파구": "Songpa-gu",
+            "양천구": "Yangcheon-gu",
+            "영등포구": "Yeongdeungpo-gu",
+            "용산구": "Yongsan-gu",
+            "은평구": "Eunpyeong-gu",
+            "종로구": "Jongno-gu",
+            "중구": "Jung-gu",
+            "중랑구": "Jungnang-gu",
+            
+            // 주요 도시
+            "부산광역시": "Busan",
+            "부산시": "Busan",
+            "부산": "Busan",
+            "대구광역시": "Daegu",
+            "대구시": "Daegu",
+            "대구": "Daegu",
+            "인천광역시": "Incheon",
+            "인천시": "Incheon",
+            "인천": "Incheon",
+            "광주광역시": "Gwangju",
+            "광주시": "Gwangju",
+            "광주": "Gwangju",
+            "대전광역시": "Daejeon",
+            "대전시": "Daejeon",
+            "대전": "Daejeon",
+            "울산광역시": "Ulsan",
+            "울산시": "Ulsan",
+            "울산": "Ulsan",
+            
+            // 도
+            "경기도": "Gyeonggi-do",
+            "강원도": "Gangwon-do",
+            "충청북도": "Chungcheongbuk-do",
+            "충청남도": "Chungcheongnam-do",
+            "전라북도": "Jeollabuk-do",
+            "전라남도": "Jeollanam-do",
+            "경상북도": "Gyeongsangbuk-do",
+            "경상남도": "Gyeongsangnam-do",
+            "제주특별자치도": "Jeju-do",
+            "제주도": "Jeju-do",
+            "제주": "Jeju",
+            
+            // 주요 시/군
+            "수원시": "Suwon",
+            "수원": "Suwon",
+            "성남시": "Seongnam",
+            "성남": "Seongnam",
+            "용인시": "Yongin",
+            "용인": "Yongin",
+            "안양시": "Anyang",
+            "안양": "Anyang",
+            "안산시": "Ansan",
+            "안산": "Ansan",
+            "고양시": "Goyang",
+            "고양": "Goyang",
+            "평택시": "Pyeongtaek",
+            "평택": "Pyeongtaek",
+            "의정부시": "Uijeongbu",
+            "의정부": "Uijeongbu",
+            "시흥시": "Siheung",
+            "시흥": "Siheung",
+            "파주시": "Paju",
+            "파주": "Paju",
+            "김포시": "Gimpo",
+            "김포": "Gimpo",
+            "광명시": "Gwangmyeong",
+            "광명": "Gwangmyeong"
+        ]
+        
+        // 매핑에서 찾아서 반환, 없으면 원본 반환
+        return locationMap[koreanLocation] ?? koreanLocation
     }
     
     // 날씨 상태에 따른 아이콘과 색상 정보
@@ -390,7 +542,7 @@ struct CalendarView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
                 .padding(.horizontal, 12)
-                .padding(.top, 12)
+//                .padding(.top, 8)
                 
                 // 요일 헤더
                 HStack(spacing: 0) {
@@ -404,7 +556,7 @@ struct CalendarView: View {
                 }
                 .padding(.horizontal, 12)
             }
-            .background(Color(NSColor.controlBackgroundColor))
+            .background(Color.clear)
             
             // 캘린더 그리드
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 1) {
@@ -466,11 +618,13 @@ struct CalendarView: View {
                     
                     Spacer()
                     
-                    Button(refreshButtonText) {
-                        weatherManager.loadWeatherForDate(selectedDate)
+                    Button(action: {
+                        weatherManager.requestLocation()
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 12))
+                            .foregroundColor(.accentColor)
                     }
-                    .font(.caption)
-                    .foregroundColor(.accentColor)
                     .buttonStyle(PlainButtonStyle())
                 }
             }
@@ -595,7 +749,7 @@ struct DayView: View {
         if !isCurrentMonth {
             return .clear
         } else if isSelected {
-            return .white
+            return .secondary
         } else if isToday {
             return .accentColor
         } else {
