@@ -458,6 +458,7 @@ struct CalendarView: View {
                     
                     Text(weatherManager.temperature)
                         .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.primary)
                     
                     Text(weatherManager.condition)
                         .font(.system(size: 14))
@@ -469,14 +470,15 @@ struct CalendarView: View {
                         weatherManager.loadWeatherForDate(selectedDate)
                     }
                     .font(.caption)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.accentColor)
                     .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.top, 6)
+//            .padding(.bottom, 4)
         }
-        .frame(width: 280, height: 360)
+        .frame(width: 280, height: 320)
         .background(Color(NSColor.windowBackgroundColor))
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
@@ -595,7 +597,7 @@ struct DayView: View {
         } else if isSelected {
             return .white
         } else if isToday {
-            return .blue
+            return .accentColor
         } else {
             return .primary
         }
@@ -605,9 +607,9 @@ struct DayView: View {
         if !isCurrentMonth {
             return .clear
         } else if isSelected {
-            return .blue
+            return .accentColor
         } else if isToday {
-            return Color.blue.opacity(0.1)
+            return Color.accentColor.opacity(0.1)
         } else {
             return .clear
         }

@@ -1,9 +1,9 @@
-"/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/ContentView.swift":
-  dependencies: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.d"
-  const-values: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.swiftconstvalues"
-  swiftmodule: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.swiftmodule"
-  swiftdoc: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.swiftdoc"
-  diagnostics: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.dia"
+"/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/menuCalApp.swift":
   abi-baseline-json: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.abi.json"
-  objc-header: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-Swift.h"
+  diagnostics: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.dia"
+  const-values: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.swiftconstvalues"
+  swiftdoc: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.swiftdoc"
   swiftsourceinfo: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.swiftsourceinfo"
+  dependencies: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-master.d"
+  objc-header: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal-Swift.h"
+  swiftmodule: "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/menuCal.build/Release/menuCal.build/Objects-normal/arm64/menuCal.swiftmodule"
