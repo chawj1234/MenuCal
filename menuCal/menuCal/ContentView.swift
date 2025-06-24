@@ -12,16 +12,17 @@ import CoreLocation
 // 간단한 날씨 매니저
 @MainActor
 class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @Published var temperature: String = "25°"
-    @Published var condition: String = "맑음"
-    @Published var weatherIcon: String = "sun.max.fill"
-    @Published var iconColor: Color = .orange
+    @Published var temperature: String = "?"
+    @Published var condition: String = NSLocalizedString("Locating...", comment: "Location loading text")
+    @Published var weatherIcon: String = "location.fill"
+    @Published var iconColor: Color = .secondary
     @Published var locationName: String = NSLocalizedString("Locating...", comment: "Location loading text")
-    @Published var isLoading = false
+    @Published var isLoading: Bool = false
     
-    private let weatherService = WeatherService.shared
     private let locationManager = CLLocationManager()
+    private let weatherService = WeatherService()
     private var currentLocation: CLLocation?
+    private var selectedDate: Date = Date() // 현재 선택된 날짜 추적
     
     override init() {
         print("🚀 [Init] SimpleWeatherManager 초기화 시작")
@@ -39,46 +40,30 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     }
     
     func requestLocation() {
-        print("🔍 [Location] requestLocation() 시작")
+        print("🚀 [Location] 위치 정보 요청 시작")
         isLoading = true
         locationName = NSLocalizedString("Locating...", comment: "Location loading text")
         
-        let authStatus = locationManager.authorizationStatus
-        print("🔍 [Location] 현재 권한 상태: \(authStatus.rawValue) (\(authStatusString(authStatus)))")
+        // 기존 위치 정보 초기화
+        currentLocation = nil
         
-        // 위치 권한 확인 및 요청
-        switch authStatus {
-        case .notDetermined:
-            print("🔍 [Location] 권한 미결정 -> 권한 요청")
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            print("🔍 [Location] 권한 승인됨 -> 위치 요청")
-            locationManager.requestLocation()
-        case .denied, .restricted:
-            print("🔍 [Location] 권한 거부됨 -> 에러 표시")
-            showLocationError()
-        @unknown default:
-            print("🔍 [Location] 알 수 없는 권한 상태 -> 에러 표시")
-            showLocationError()
-        }
+        locationManager.requestLocation()
     }
     
     // CLLocationManagerDelegate 메서드들
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("🔍 [Location] didUpdateLocations 호출됨")
-        print("🔍 [Location] 받은 위치 개수: \(locations.count)")
-        
-        guard let location = locations.first else {
-            print("🔍 [Location] 위치 정보 없음 -> 에러 표시")
-            showLocationError()
+        guard let location = locations.last else {
+            print("❌ [Location] 위치 정보 없음")
             return
         }
         
-        print("🔍 [Location] 위치 정보 획득: 위도 \(location.coordinate.latitude), 경도 \(location.coordinate.longitude)")
-        print("🔍 [Location] 정확도: \(location.horizontalAccuracy)m")
-        
+        print("🔍 [Location] 위치 업데이트: (\(location.coordinate.latitude), \(location.coordinate.longitude))")
         currentLocation = location
-        loadWeather(for: location, date: Date())
+        
+        // 현재 선택된 날짜의 날씨 로드
+        loadWeather(for: location, date: selectedDate)
+        
+        locationManager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -91,9 +76,12 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        print("🔍 [Location] 권한 상태 변경: \(status.rawValue) (\(authStatusString(status)))")
+        print("🔍 [Location] 권한 상태 변경: \(authStatusString(status))")
         
         switch status {
+        case .notDetermined:
+            print("🔍 [Location] 권한 미결정 -> 권한 요청")
+            locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
             print("🔍 [Location] 권한 승인됨 -> 위치 요청")
             locationManager.requestLocation()
@@ -145,6 +133,7 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     
     // 선택된 날짜의 날씨 가져오기
     func loadWeatherForDate(_ date: Date) {
+        selectedDate = date // 선택된 날짜 저장
         guard let location = currentLocation else {
             print("❌ [Weather] 현재 위치 정보 없음")
             showLocationError()
@@ -202,14 +191,14 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
                             date: date
                         )
                     } else {
-                        // 데이터가 없는 경우
+                        // 데이터가 없는 경우 - 과거/미래에 따라 다른 메시지
                         let dateType = isFutureDate ? "예보" : "과거 기록"
                         print("🌤️ [Weather] \(dateType) 데이터 없음")
-                        self.temperature = "?"
+                        self.temperature = ""
                         self.condition = isFutureDate ? 
-                            NSLocalizedString("No forecast data", comment: "No forecast data available") :
-                            NSLocalizedString("No historical data", comment: "No historical weather data available")
-                        self.weatherIcon = isFutureDate ? "questionmark" : "clock"
+                            NSLocalizedString("Forecast data is not available yet", comment: "Forecast data not available") :
+                            NSLocalizedString("We don't have data for past weather.", comment: "Past weather data not available")
+                        self.weatherIcon = "calendar.badge.clock"
                         self.iconColor = .secondary
                         self.isLoading = false
                     }
