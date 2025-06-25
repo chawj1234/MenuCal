@@ -10,5 +10,7 @@
 	<string>U9JJVCW82P</string>
 	<key>CFBundleName</key>
 	<string>menuCal</string>
+	<key>LSUIElement</key>
+	<true/>
 </dict>
 </plist>
