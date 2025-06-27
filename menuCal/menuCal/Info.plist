@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>현재 위치의 날씨 정보를 제공하기 위해 위치 서비스를 사용합니다.</string>
+	<string>This app uses location services to provide weather information for your current location.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>현재 위치의 날씨 정보를 제공하기 위해 위치 서비스를 사용합니다.</string>
+	<string>This app uses location services to provide weather information for your current location.</string>
 	<key>TeamIdentifier</key>
 	<string>U9JJVCW82P</string>
 	<key>CFBundleName</key>

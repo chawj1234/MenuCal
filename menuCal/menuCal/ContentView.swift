@@ -8,6 +8,7 @@
 import SwiftUI
 import WeatherKit
 import CoreLocation
+import AppKit
 
 // 간단한 날씨 매니저
 @MainActor
@@ -204,11 +205,11 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
                     }
                 }
                 
-                // 위치명 가져오기 (처음 한 번만)
-                if locationName == "위치 확인 중..." || locationName == NSLocalizedString("Locating...", comment: "Location loading text") {
-                    print("🌤️ [Weather] 위치명 역지오코딩 시작")
-                    getLocationName(for: location)
-                }
+                        // 위치명 가져오기 (처음 한 번만)
+        if locationName == NSLocalizedString("Locating...", comment: "Location loading text") {
+            print("🌤️ [Weather] 위치명 역지오코딩 시작")
+            getLocationName(for: location)
+        }
                 
                 self.isLoading = false
                 print("🌤️ [Weather] loadWeather 완료")
@@ -233,20 +234,25 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
         print("📍 [Geocoding] 역지오코딩 시작 - 위치: (\(location.coordinate.latitude), \(location.coordinate.longitude))")
         let geocoder = CLGeocoder()
         
-        // 영어 로케일로 역지오코딩 시도
+        // 시스템 언어에 맞는 로케일로 위치명 요청
+        let systemLanguage = Locale.current.languageCode ?? "en"
+        let preferredLocale = Locale(identifier: systemLanguage)
+        
+        print("📍 [Geocoding] 시스템 언어: \(systemLanguage), 사용할 로케일: \(preferredLocale.identifier)")
+        
         if #available(macOS 11.0, *) {
-            geocoder.reverseGeocodeLocation(location, preferredLocale: Locale(identifier: "en_US")) { [weak self] placemarks, error in
-                self?.handleGeocodeResult(placemarks: placemarks, error: error, isEnglish: true)
+            geocoder.reverseGeocodeLocation(location, preferredLocale: preferredLocale) { [weak self] placemarks, error in
+                self?.handleGeocodeResult(placemarks: placemarks, error: error)
             }
         } else {
-            // macOS 11 미만에서는 기본 로케일 사용 후 번역
+            // macOS 11 미만에서는 기본 로케일 사용
             geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
-                self?.handleGeocodeResult(placemarks: placemarks, error: error, isEnglish: false)
+                self?.handleGeocodeResult(placemarks: placemarks, error: error)
             }
         }
     }
     
-    private func handleGeocodeResult(placemarks: [CLPlacemark]?, error: Error?, isEnglish: Bool) {
+    private func handleGeocodeResult(placemarks: [CLPlacemark]?, error: Error?) {
         DispatchQueue.main.async {
             if let error = error {
                 print("❌ [Geocoding] 역지오코딩 실패: \(error.localizedDescription)")
@@ -256,18 +262,19 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
             
             if let placemark = placemarks?.first {
                 let originalLocationName = placemark.locality ?? 
-                                           placemark.administrativeArea ?? 
-                                           NSLocalizedString("Current Location", comment: "Current location text")
+                                          placemark.administrativeArea ?? 
+                                          NSLocalizedString("Current Location", comment: "Current location text")
                 
+                // 시스템 언어가 영어인데 한국어 위치명이 나온 경우 영어로 변환
+                let systemLanguage = Locale.current.languageCode ?? "en"
                 let finalLocationName: String
-                if isEnglish {
-                    // 이미 영어로 받았으므로 그대로 사용
-                    finalLocationName = originalLocationName
-                    print("📍 [Geocoding] 영어 위치명 획득: \(originalLocationName)")
+                
+                if systemLanguage == "en" && self.containsKorean(originalLocationName) {
+                    finalLocationName = self.translateKoreanLocationToEnglish(originalLocationName)
+                    print("📍 [Geocoding] 한국어 위치명을 영어로 변환: \(originalLocationName) -> \(finalLocationName)")
                 } else {
-                    // 한국어로 받았으므로 번역 시도
-                    finalLocationName = self.translateLocationToEnglish(originalLocationName)
-                    print("📍 [Geocoding] 위치명 번역: \(originalLocationName) -> \(finalLocationName)")
+                    finalLocationName = originalLocationName
+                    print("📍 [Geocoding] 위치명 사용: \(finalLocationName)")
                 }
                 
                 self.locationName = finalLocationName
@@ -278,13 +285,79 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
         }
     }
     
-    // 한국어 위치명을 영어로 번역하는 함수
-    private func translateLocationToEnglish(_ koreanLocation: String) -> String {
+    // 한국어 문자가 포함되어 있는지 확인
+    private func containsKorean(_ text: String) -> Bool {
+        for character in text {
+            let scalar = character.unicodeScalars.first
+            if let scalar = scalar,
+               (scalar.value >= 0xAC00 && scalar.value <= 0xD7AF) || // 한글 완성형
+               (scalar.value >= 0x1100 && scalar.value <= 0x11FF) || // 한글 자모
+               (scalar.value >= 0x3130 && scalar.value <= 0x318F) || // 한글 호환 자모
+               (scalar.value >= 0xA960 && scalar.value <= 0xA97F) {   // 한글 확장 A
+                return true
+            }
+        }
+        return false
+    }
+    
+    // 한국어 위치명을 영어로 변환
+    private func translateKoreanLocationToEnglish(_ koreanLocation: String) -> String {
         let locationMap: [String: String] = [
-            // 서울 지역
+            // 주요 도시
+            "포항시": "Pohang",
+            "포항": "Pohang",
             "서울특별시": "Seoul",
             "서울시": "Seoul",
             "서울": "Seoul",
+            "부산광역시": "Busan",
+            "부산시": "Busan",
+            "부산": "Busan",
+            "대구광역시": "Daegu",
+            "대구시": "Daegu",
+            "대구": "Daegu",
+            "인천광역시": "Incheon",
+            "인천시": "Incheon",
+            "인천": "Incheon",
+            "광주광역시": "Gwangju",
+            "광주시": "Gwangju",
+            "광주": "Gwangju",
+            "대전광역시": "Daejeon",
+            "대전시": "Daejeon",
+            "대전": "Daejeon",
+            "울산광역시": "Ulsan",
+            "울산시": "Ulsan",
+            "울산": "Ulsan",
+            
+            // 경상북도 주요 도시
+            "경상북도": "Gyeongsangbuk-do",
+            "경주시": "Gyeongju",
+            "경주": "Gyeongju",
+            "안동시": "Andong",
+            "안동": "Andong",
+            "구미시": "Gumi",
+            "구미": "Gumi",
+            "영주시": "Yeongju",
+            "영주": "Yeongju",
+            "김천시": "Gimcheon",
+            "김천": "Gimcheon",
+            "상주시": "Sangju",
+            "상주": "Sangju",
+            "문경시": "Mungyeong",
+            "문경": "Mungyeong",
+            
+            // 기타 도
+            "경기도": "Gyeonggi-do",
+            "강원도": "Gangwon-do",
+            "충청북도": "Chungcheongbuk-do",
+            "충청남도": "Chungcheongnam-do",
+            "전라북도": "Jeollabuk-do",
+            "전라남도": "Jeollanam-do",
+            "경상남도": "Gyeongsangnam-do",
+            "제주특별자치도": "Jeju-do",
+            "제주도": "Jeju-do",
+            "제주": "Jeju",
+            
+            // 서울 구
             "강남구": "Gangnam-gu",
             "강동구": "Gangdong-gu",
             "강북구": "Gangbuk-gu",
@@ -309,71 +382,13 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
             "은평구": "Eunpyeong-gu",
             "종로구": "Jongno-gu",
             "중구": "Jung-gu",
-            "중랑구": "Jungnang-gu",
-            
-            // 주요 도시
-            "부산광역시": "Busan",
-            "부산시": "Busan",
-            "부산": "Busan",
-            "대구광역시": "Daegu",
-            "대구시": "Daegu",
-            "대구": "Daegu",
-            "인천광역시": "Incheon",
-            "인천시": "Incheon",
-            "인천": "Incheon",
-            "광주광역시": "Gwangju",
-            "광주시": "Gwangju",
-            "광주": "Gwangju",
-            "대전광역시": "Daejeon",
-            "대전시": "Daejeon",
-            "대전": "Daejeon",
-            "울산광역시": "Ulsan",
-            "울산시": "Ulsan",
-            "울산": "Ulsan",
-            
-            // 도
-            "경기도": "Gyeonggi-do",
-            "강원도": "Gangwon-do",
-            "충청북도": "Chungcheongbuk-do",
-            "충청남도": "Chungcheongnam-do",
-            "전라북도": "Jeollabuk-do",
-            "전라남도": "Jeollanam-do",
-            "경상북도": "Gyeongsangbuk-do",
-            "경상남도": "Gyeongsangnam-do",
-            "제주특별자치도": "Jeju-do",
-            "제주도": "Jeju-do",
-            "제주": "Jeju",
-            
-            // 주요 시/군
-            "수원시": "Suwon",
-            "수원": "Suwon",
-            "성남시": "Seongnam",
-            "성남": "Seongnam",
-            "용인시": "Yongin",
-            "용인": "Yongin",
-            "안양시": "Anyang",
-            "안양": "Anyang",
-            "안산시": "Ansan",
-            "안산": "Ansan",
-            "고양시": "Goyang",
-            "고양": "Goyang",
-            "평택시": "Pyeongtaek",
-            "평택": "Pyeongtaek",
-            "의정부시": "Uijeongbu",
-            "의정부": "Uijeongbu",
-            "시흥시": "Siheung",
-            "시흥": "Siheung",
-            "파주시": "Paju",
-            "파주": "Paju",
-            "김포시": "Gimpo",
-            "김포": "Gimpo",
-            "광명시": "Gwangmyeong",
-            "광명": "Gwangmyeong"
+            "중랑구": "Jungnang-gu"
         ]
         
         // 매핑에서 찾아서 반환, 없으면 원본 반환
         return locationMap[koreanLocation] ?? koreanLocation
     }
+
     
     // 날씨 상태에 따른 아이콘과 색상 정보
     private func weatherIconInfo(for condition: WeatherCondition) -> (icon: String, color: Color) {
@@ -569,40 +584,19 @@ struct CalendarView: View {
             .padding(.horizontal, 12)
             .padding(.bottom, 8)
             
-            Divider()
-            
             // 날씨 정보
-            VStack(spacing: 4) {
+            VStack(spacing: 0) {
+                Divider()
+                    .padding(.bottom, 10)
+                
                 // 위치 정보
-                HStack {
+                HStack(spacing: 4) {
                     Image(systemName: "location.fill")
-                        .font(.system(size: 10))
+                        .font(.system(size: 9))
                         .foregroundColor(.secondary)
                     
                     Text(weatherManager.locationName)
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                    
-                    Spacer()
-                }
-                
-                HStack(spacing: 8) {
-                    if weatherManager.isLoading {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                            .frame(width: 16, height: 16)
-                    } else {
-                        Image(systemName: weatherManager.weatherIcon)
-                            .foregroundColor(weatherManager.iconColor)
-                            .font(.system(size: 16))
-                    }
-                    
-                    Text(weatherManager.temperature)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.primary)
-                    
-                    Text(weatherManager.condition)
-                        .font(.system(size: 14))
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.secondary)
                     
                     Spacer()
@@ -611,17 +605,66 @@ struct CalendarView: View {
                         weatherManager.requestLocation()
                     }) {
                         Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 12))
+                            .font(.system(size: 10))
                             .foregroundColor(.accentColor)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .help("Refresh weather")
                 }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
+                
+                // 날씨 상세 정보
+                HStack(spacing: 12) {
+                    if weatherManager.isLoading {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                            .frame(width: 18, height: 18)
+                    } else {
+                        Image(systemName: weatherManager.weatherIcon)
+                            .foregroundColor(weatherManager.iconColor)
+                            .font(.system(size: 18))
+                            .frame(width: 20, height: 20)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 6) {
+                            Text(weatherManager.temperature)
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.primary)
+                            
+                            Text(weatherManager.condition)
+                                .font(.system(size: 13))
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        // Apple Weather 출처 표시
+                        Button(action: {
+                            if let url = URL(string: "https://weatherkit.apple.com/legal-attribution.html") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(.secondary.opacity(0.6))
+                                
+                                Text("Weather data by Apple Weather")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.secondary.opacity(0.6))
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .help("View Apple Weather legal attribution")
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
             }
-            .padding(.horizontal, 12)
-            .padding(.top, 6)
-//            .padding(.bottom, 4)
         }
-        .frame(width: 280, height: 320)
+        .frame(width: 280, height: 340)
         .background(Color(NSColor.windowBackgroundColor))
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }

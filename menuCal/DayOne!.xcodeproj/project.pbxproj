@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		79EEB0992E09A1B300BB56D3 /* menuCal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = menuCal.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		79EEB0A72E09A1B400BB56D3 /* menuCalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = menuCalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		79EEB0B12E09A1B400BB56D3 /* menuCalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = menuCalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		79EEB0992E09A1B300BB56D3 /* DayOne!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DayOne!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		79EEB0A72E09A1B400BB56D3 /* DayOne!Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DayOne!Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		79EEB0B12E09A1B400BB56D3 /* DayOne!UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DayOne!UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -85,9 +85,9 @@
 		79EEB09A2E09A1B300BB56D3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				79EEB0992E09A1B300BB56D3 /* menuCal.app */,
-				79EEB0A72E09A1B400BB56D3 /* menuCalTests.xctest */,
-				79EEB0B12E09A1B400BB56D3 /* menuCalUITests.xctest */,
+				79EEB0992E09A1B300BB56D3 /* DayOne!.app */,
+				79EEB0A72E09A1B400BB56D3 /* DayOne!Tests.xctest */,
+				79EEB0B12E09A1B400BB56D3 /* DayOne!UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		79EEB0982E09A1B300BB56D3 /* menuCal */ = {
+		79EEB0982E09A1B300BB56D3 /* DayOne! */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 79EEB0BB2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCal" */;
+			buildConfigurationList = 79EEB0BB2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!" */;
 			buildPhases = (
 				79EEB0952E09A1B300BB56D3 /* Sources */,
 				79EEB0962E09A1B300BB56D3 /* Frameworks */,
@@ -110,16 +110,16 @@
 			fileSystemSynchronizedGroups = (
 				79EEB09B2E09A1B300BB56D3 /* menuCal */,
 			);
-			name = menuCal;
+			name = "DayOne!";
 			packageProductDependencies = (
 			);
 			productName = menuCal;
-			productReference = 79EEB0992E09A1B300BB56D3 /* menuCal.app */;
+			productReference = 79EEB0992E09A1B300BB56D3 /* DayOne!.app */;
 			productType = "com.apple.product-type.application";
 		};
-		79EEB0A62E09A1B400BB56D3 /* menuCalTests */ = {
+		79EEB0A62E09A1B400BB56D3 /* DayOne!Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 79EEB0BE2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCalTests" */;
+			buildConfigurationList = 79EEB0BE2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!Tests" */;
 			buildPhases = (
 				79EEB0A32E09A1B400BB56D3 /* Sources */,
 				79EEB0A42E09A1B400BB56D3 /* Frameworks */,
@@ -133,16 +133,16 @@
 			fileSystemSynchronizedGroups = (
 				79EEB0AA2E09A1B400BB56D3 /* menuCalTests */,
 			);
-			name = menuCalTests;
+			name = "DayOne!Tests";
 			packageProductDependencies = (
 			);
 			productName = menuCalTests;
-			productReference = 79EEB0A72E09A1B400BB56D3 /* menuCalTests.xctest */;
+			productReference = 79EEB0A72E09A1B400BB56D3 /* DayOne!Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		79EEB0B02E09A1B400BB56D3 /* menuCalUITests */ = {
+		79EEB0B02E09A1B400BB56D3 /* DayOne!UITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 79EEB0C12E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCalUITests" */;
+			buildConfigurationList = 79EEB0C12E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!UITests" */;
 			buildPhases = (
 				79EEB0AD2E09A1B400BB56D3 /* Sources */,
 				79EEB0AE2E09A1B400BB56D3 /* Frameworks */,
@@ -156,11 +156,11 @@
 			fileSystemSynchronizedGroups = (
 				79EEB0B42E09A1B400BB56D3 /* menuCalUITests */,
 			);
-			name = menuCalUITests;
+			name = "DayOne!UITests";
 			packageProductDependencies = (
 			);
 			productName = menuCalUITests;
-			productReference = 79EEB0B12E09A1B400BB56D3 /* menuCalUITests.xctest */;
+			productReference = 79EEB0B12E09A1B400BB56D3 /* DayOne!UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,12 +186,13 @@
 					};
 				};
 			};
-			buildConfigurationList = 79EEB0942E09A1B300BB56D3 /* Build configuration list for PBXProject "menuCal" */;
+			buildConfigurationList = 79EEB0942E09A1B300BB56D3 /* Build configuration list for PBXProject "DayOne!" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 79EEB0902E09A1B300BB56D3;
 			minimizedProjectReferenceProxies = 1;
@@ -200,9 +201,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				79EEB0982E09A1B300BB56D3 /* menuCal */,
-				79EEB0A62E09A1B400BB56D3 /* menuCalTests */,
-				79EEB0B02E09A1B400BB56D3 /* menuCalUITests */,
+				79EEB0982E09A1B300BB56D3 /* DayOne! */,
+				79EEB0A62E09A1B400BB56D3 /* DayOne!Tests */,
+				79EEB0B02E09A1B400BB56D3 /* DayOne!UITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +259,12 @@
 /* Begin PBXTargetDependency section */
 		79EEB0A92E09A1B400BB56D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 79EEB0982E09A1B300BB56D3 /* menuCal */;
+			target = 79EEB0982E09A1B300BB56D3 /* DayOne! */;
 			targetProxy = 79EEB0A82E09A1B400BB56D3 /* PBXContainerItemProxy */;
 		};
 		79EEB0B32E09A1B400BB56D3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 79EEB0982E09A1B300BB56D3 /* menuCal */;
+			target = 79EEB0982E09A1B300BB56D3 /* DayOne! */;
 			targetProxy = 79EEB0B22E09A1B400BB56D3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -397,7 +398,7 @@
 				CODE_SIGN_ENTITLEMENTS = menuCal/menuCal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U9JJVCW82P;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -412,8 +413,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.3;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Wonjun.menuCal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -430,7 +431,7 @@
 				CODE_SIGN_ENTITLEMENTS = menuCal/menuCal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = U9JJVCW82P;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -445,8 +446,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.3;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Wonjun.menuCal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -469,7 +470,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/menuCal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/menuCal";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DayOne!.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DayOne!";
 			};
 			name = Debug;
 		};
@@ -487,7 +488,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/menuCal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/menuCal";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DayOne!.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DayOne!";
 			};
 			name = Release;
 		};
@@ -526,7 +527,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		79EEB0942E09A1B300BB56D3 /* Build configuration list for PBXProject "menuCal" */ = {
+		79EEB0942E09A1B300BB56D3 /* Build configuration list for PBXProject "DayOne!" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79EEB0B92E09A1B400BB56D3 /* Debug */,
@@ -535,7 +536,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79EEB0BB2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCal" */ = {
+		79EEB0BB2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79EEB0BC2E09A1B400BB56D3 /* Debug */,
@@ -544,7 +545,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79EEB0BE2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCalTests" */ = {
+		79EEB0BE2E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79EEB0BF2E09A1B400BB56D3 /* Debug */,
@@ -553,7 +554,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		79EEB0C12E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "menuCalUITests" */ = {
+		79EEB0C12E09A1B400BB56D3 /* Build configuration list for PBXNativeTarget "DayOne!UITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				79EEB0C22E09A1B400BB56D3 /* Debug */,

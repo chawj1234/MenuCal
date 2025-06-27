@@ -23,6 +23,7 @@ struct menuCalApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
+    var statusBarMenu: NSMenu?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // 독 아이콘 숨기기
@@ -36,9 +37,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if let button = statusItem?.button {
             updateDateDisplay()
-            button.action = #selector(togglePopover)
+            button.action = #selector(statusBarButtonClicked(_:))
             button.target = self
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
+        
+        // 상태바 메뉴 설정
+        setupStatusBarMenu()
         
         // 1분마다 날짜 업데이트
         Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { _ in
@@ -49,6 +54,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         popover = NSPopover()
         popover?.contentViewController = NSHostingController(rootView: ContentView())
         popover?.behavior = .transient
+        
+        // 키보드 단축키 지원 (Cmd+Q로 종료)
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers == "q" {
+                self.quitApp()
+                return nil
+            }
+            return event
+        }
+    }
+    
+    @objc func statusBarButtonClicked(_ sender: NSStatusBarButton) {
+        guard let event = NSApp.currentEvent else { return }
+        
+        if event.type == .rightMouseUp {
+            // 우클릭 - 메뉴 표시
+            statusItem?.menu = statusBarMenu
+            statusItem?.button?.performClick(nil)
+            statusItem?.menu = nil
+        } else {
+            // 좌클릭 - 팝오버 토글
+            togglePopover()
+        }
     }
     
     @objc func togglePopover() {
@@ -61,6 +89,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
             }
         }
+    }
+    
+    private func setupStatusBarMenu() {
+        statusBarMenu = NSMenu()
+        
+        // About 메뉴 아이템
+        let aboutMenuItem = NSMenuItem(title: NSLocalizedString("About MenuCal", comment: "About menu item"), 
+                                       action: #selector(showAbout), 
+                                       keyEquivalent: "")
+        aboutMenuItem.target = self
+        statusBarMenu?.addItem(aboutMenuItem)
+        
+        // 구분선
+        statusBarMenu?.addItem(NSMenuItem.separator())
+        
+        // Quit 메뉴 아이템
+        let quitMenuItem = NSMenuItem(title: NSLocalizedString("Quit MenuCal", comment: "Quit menu item"), 
+                                      action: #selector(quitApp), 
+                                      keyEquivalent: "q")
+        quitMenuItem.target = self
+        statusBarMenu?.addItem(quitMenuItem)
+    }
+    
+    @objc func showAbout() {
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString("About MenuCal", comment: "About dialog title")
+        alert.informativeText = NSLocalizedString("MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather", comment: "About dialog content")
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK button"))
+        alert.runModal()
+    }
+    
+    @objc func quitApp() {
+        NSApplication.shared.terminate(nil)
     }
     
     private func updateDateDisplay() {
