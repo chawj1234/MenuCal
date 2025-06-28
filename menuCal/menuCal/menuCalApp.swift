@@ -128,13 +128,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func updateDateDisplay() {
         DispatchQueue.main.async {
             if let button = self.statusItem?.button {
-                let formatter = DateFormatter()
-                formatter.locale = Locale.current
+                let calendar = Calendar.current
+                let day = calendar.component(.day, from: Date())
                 
-                // 날짜만 표시 (예: "24")
-                formatter.dateFormat = "d"
+                // 영어 서수 표현으로 변환 (1st, 2nd, 3rd, 4th, ...)
+                let numberFormatter = NumberFormatter()
+                numberFormatter.numberStyle = .ordinal
+                numberFormatter.locale = Locale(identifier: "en_US")
                 
-                button.title = formatter.string(from: Date())
+                let ordinalDay = numberFormatter.string(from: NSNumber(value: day)) ?? "\(day)"
+                
+                button.title = ordinalDay
             }
         }
     }
