@@ -545,8 +545,8 @@ struct CalendarView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 5)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 8)
 
                 // 요일 헤더
                 HStack(spacing: 0) {
@@ -628,7 +628,7 @@ struct CalendarView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 8) {
                             Text(weatherManager.temperature)
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.primary)
@@ -667,6 +667,7 @@ struct CalendarView: View {
         .frame(width: 280, height: 340)
         .background(Color(NSColor.windowBackgroundColor))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.top, 4)
     }
     
     // MARK: - Calendar Logic
