@@ -546,8 +546,8 @@ struct CalendarView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
                 .padding(.horizontal, 12)
-//                .padding(.top, 8)
-                
+                .padding(.vertical, 5)
+
                 // 요일 헤더
                 HStack(spacing: 0) {
                     ForEach(weekdaySymbols, id: \.self) { day in
@@ -558,7 +558,7 @@ struct CalendarView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 8)
             }
             .background(Color.clear)
             
