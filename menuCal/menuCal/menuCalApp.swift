@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppKit
+// import ServiceManagement  // 자동 실행 기능을 위해 필요한 경우 주석 해제
 
 @main
 struct menuCalApp: App {
@@ -27,6 +28,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // 독 아이콘 숨기기
         NSApp.setActivationPolicy(.accessory)
+        
+        // 로그인 시 자동 시작 설정 (필요한 경우 주석 해제)
+        // enableLoginItem()
         
         // 상태바 아이템 생성
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -138,4 +142,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+    
+    // 로그인 시 자동 시작 활성화 (필요한 경우 주석 해제)
+    /*
+    private func enableLoginItem() {
+        if #available(macOS 13.0, *) {
+            // macOS 13 이상에서는 새로운 API 사용
+            do {
+                try SMAppService.mainApp.register()
+            } catch {
+                print("로그인 아이템 등록 실패: \(error.localizedDescription)")
+            }
+        } else {
+            // macOS 12 이하에서는 기존 API 사용
+            let bundleIdentifier = Bundle.main.bundleIdentifier ?? "com.yourcompany.menuCal"
+            
+            _ = SMLoginItemSetEnabled(bundleIdentifier as CFString, true)
+        }
+    }
+    */
 } 
