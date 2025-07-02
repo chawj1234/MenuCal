@@ -371,7 +371,7 @@ struct CalendarView: View {
             }
             
             // 캘린더 그리드
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 1) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7), spacing: 0) {
                 ForEach(calendarDays, id: \.self) { date in
                     if let date = date {
                         DayView(
@@ -389,7 +389,7 @@ struct CalendarView: View {
                     }
                 }
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 10)
             .padding(.bottom, 8)
             
             // 날씨 정보
@@ -536,17 +536,23 @@ struct DayView: View {
                 .font(.system(size: 13))
                 .foregroundColor(textColor)
                 .frame(width: 32, height: 32)
-                .background(backgroundColor)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(backgroundColor)
+                )
+                .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+        .frame(width: 32, height: 32)
+        .contentShape(Rectangle())
+//        .border(Color.gray)
     }
     
     private var textColor: Color {
         if !isCurrentMonth {
             return .clear
         } else if isSelected {
-            return .secondary
+            return .white
         } else if isToday {
             return .accentColor
         } else {
