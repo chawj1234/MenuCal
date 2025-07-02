@@ -109,8 +109,8 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
                     } else {
                         self.temperature = ""
                         self.condition = isFutureDate ? 
-                            NSLocalizedString("Forecast data is not available yet", comment: "Forecast data not available") :
-                            NSLocalizedString("We don't have data for past weather.", comment: "Past weather data not available")
+                            NSLocalizedString("The forecast isn't available yet.", comment: "Forecast data not available") :
+                            NSLocalizedString("Past weather data is not available.", comment: "Past weather data not available")
                         self.weatherIcon = ""
                         self.iconColor = .secondary
                         self.isLoading = false
@@ -229,7 +229,7 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     private func showWeatherError() {
         isLoading = false
         temperature = "?"
-        condition = NSLocalizedString("Unable to fetch weather data", comment: "Weather fetch error text")
+        condition = NSLocalizedString("Unable to load weather data.", comment: "Weather fetch error text")
         weatherIcon = "exclamationmark.triangle"
         iconColor = .orange
     }

@@ -1,13 +1,13 @@
 /* Location and Loading */
 "Locating..." = "위치 확인 중...";
 "Location Failed" = "위치 확인 실패";
-"Location permission required" = "위치 권한이 필요합니다";
+"Location permission required" = "위치 권한이 필요합니다.";
 "Current Location" = "현재 위치";
 
 /* Weather Data */
-"Unable to fetch weather data" = "날씨 정보를 가져올 수 없습니다";
-"Forecast data is not available yet" = "예보 데이터가 아직 제공되지 않습니다";
-"We don't have data for past weather." = "과거 날씨 데이터가 없습니다.";
+"Unable to load weather data." = "날씨 정보를 가져올 수 없습니다.";
+"The forecast isn't available yet." = "예보 데이터가 아직 준비되지 않습니다.";
+"Past weather data is not available." = "과거 데이터는 제공되지 않습니다.";
 
 /* Weather Conditions */
 "Clear" = "맑음";
@@ -42,12 +42,12 @@
 "Refresh" = "새로고침";
 
 /* Menu Items */
-"About MenuCal" = "MenuCal 정보";
-"Quit MenuCal" = "MenuCal 종료";
+"About DayOne!" = "DayOne! 정보";
+"Quit DayOne!" = "DayOne! 종료";
 "OK" = "확인";
 
 /* About Dialog */
-"MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "MenuCal은 메뉴 바를 위한 간단한 달력 및 날씨 앱입니다.\n\n버전 1.0\n\n날씨 데이터는 Apple Weather에서 제공됩니다";
+"DayOne! is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "DayOne!은 메뉴 바를 위한 간단한 달력 및 날씨 앱입니다.\n\n버전 1.0\n\n날씨 데이터는 Apple Weather에서 제공됩니다";
 
 /* Location Permission */
 "This app uses location services to provide weather information for your current location." = "현재 위치의 날씨 정보를 제공하기 위해 위치 서비스를 사용합니다."; 

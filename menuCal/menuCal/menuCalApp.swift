@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu = NSMenu()
         
         // About 메뉴 아이템
-        let aboutMenuItem = NSMenuItem(title: NSLocalizedString("About MenuCal", comment: "About menu item"), 
+        let aboutMenuItem = NSMenuItem(title: NSLocalizedString("About DayOne!", comment: "About menu item"), 
                                        action: #selector(showAbout), 
                                        keyEquivalent: "")
         aboutMenuItem.target = self
@@ -91,7 +91,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu?.addItem(NSMenuItem.separator())
         
         // Quit 메뉴 아이템
-        let quitMenuItem = NSMenuItem(title: NSLocalizedString("Quit MenuCal", comment: "Quit menu item"), 
+        let quitMenuItem = NSMenuItem(title: NSLocalizedString("Quit DayOne!", comment: "Quit menu item"), 
                                       action: #selector(quitApp), 
                                       keyEquivalent: "q")
         quitMenuItem.target = self
@@ -100,8 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString("About MenuCal", comment: "About dialog title")
-        alert.informativeText = NSLocalizedString("MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather", comment: "About dialog content")
+        alert.messageText = NSLocalizedString("About DayOne!", comment: "About dialog title")
+        alert.informativeText = NSLocalizedString("DayOne! is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather", comment: "About dialog content")
         alert.alertStyle = .informational
         alert.addButton(withTitle: NSLocalizedString("OK", comment: "OK button"))
         alert.runModal()
