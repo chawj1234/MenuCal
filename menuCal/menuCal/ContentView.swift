@@ -369,7 +369,7 @@ struct CalendarView: View {
                 }
                 .padding(.horizontal, 8)
             }
-            
+                .padding(.bottom, 3)
             // 캘린더 그리드
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7), spacing: 0) {
                 ForEach(calendarDays, id: \.self) { date in
