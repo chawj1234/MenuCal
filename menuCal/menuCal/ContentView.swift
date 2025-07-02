@@ -111,7 +111,7 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
                         self.condition = isFutureDate ? 
                             NSLocalizedString("Forecast data is not available yet", comment: "Forecast data not available") :
                             NSLocalizedString("We don't have data for past weather.", comment: "Past weather data not available")
-                        self.weatherIcon = "calendar.badge.clock"
+                        self.weatherIcon = ""
                         self.iconColor = .secondary
                         self.isLoading = false
                     }
@@ -428,7 +428,7 @@ struct CalendarView: View {
                         ProgressView()
                             .scaleEffect(0.7)
                             .frame(width: 18, height: 18)
-                    } else {
+                    } else if !weatherManager.weatherIcon.isEmpty {
                         Image(systemName: weatherManager.weatherIcon)
                             .foregroundColor(weatherManager.iconColor)
                             .font(.system(size: 18))
