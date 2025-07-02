@@ -51,9 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // 팝오버 설정
-        popover = NSPopover()
-        popover?.contentViewController = NSHostingController(rootView: ContentView())
-        popover?.behavior = .transient
+        setupPopover()
         
         // 키보드 단축키 지원 (Cmd+Q로 종료)
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
@@ -76,18 +74,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             // 좌클릭 - 팝오버 토글
             togglePopover()
-        }
-    }
-    
-    @objc func togglePopover() {
-        guard let button = statusItem?.button else { return }
-        
-        if let popover = popover {
-            if popover.isShown {
-                popover.performClose(nil)
-            } else {
-                popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-            }
         }
     }
     
@@ -139,6 +125,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let ordinalDay = numberFormatter.string(from: NSNumber(value: day)) ?? "\(day)"
                 
                 button.title = ordinalDay
+            }
+        }
+    }
+    
+    private func setupPopover() {
+        popover = NSPopover()
+        popover?.contentSize = NSSize(width: 280, height: 340)
+        popover?.behavior = .transient
+        updatePopoverContent()
+    }
+    
+    private func updatePopoverContent() {
+        let contentView = ContentView()
+        popover?.contentViewController = NSHostingController(rootView: contentView)
+    }
+    
+    @objc func togglePopover() {
+        guard let button = statusItem?.button else { return }
+        
+        if let popover = popover {
+            if popover.isShown {
+                popover.performClose(nil)
+            } else {
+                updatePopoverContent() // 팝오버를 열기 전에 컨텐츠를 새로 생성
+                popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
             }
         }
     }

@@ -318,9 +318,16 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
 }
 
 struct CalendarView: View {
-    @State private var selectedDate = Date()
-    @State private var displayDate = Date()
-    @StateObject private var weatherManager = SimpleWeatherManager()
+    @State private var selectedDate: Date
+    @State private var displayDate: Date
+    @StateObject private var weatherManager: SimpleWeatherManager
+    
+    init() {
+        let today = Date()
+        _selectedDate = State(initialValue: today)
+        _displayDate = State(initialValue: today)
+        _weatherManager = StateObject(wrappedValue: SimpleWeatherManager())
+    }
     
     var body: some View {
         VStack(spacing: 0) {
