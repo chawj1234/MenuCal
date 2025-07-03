@@ -51,7 +51,7 @@
 
 ```bash
 # 저장소 클론
-git clone https://github.com/your-username/MenuCal.git
+git clone https://github.com/chawj1234/MenuCal.git
 
 # 프로젝트 디렉토리로 이동
 cd MenuCal/menuCal
@@ -180,7 +180,7 @@ DayOne! 프로젝트에 기여해주셔서 감사합니다!
 
 ```bash
 # 개발용 클론
-git clone https://github.com/your-username/MenuCal.git
+git clone https://github.com/chawj1234/MenuCal.git
 cd MenuCal/menuCal
 
 # Xcode에서 열기
@@ -199,8 +199,8 @@ open DayOne!.xcodeproj
 프로젝트에 대한 질문이나 제안사항이 있으시면 언제든 연락해주세요!
 
 - **개발자**: 차원준 (chawj)
-- **GitHub**: [@your-username](https://github.com/your-username)
-- **이메일**: your-email@example.com
+- **GitHub**: [@chawj1234](https://github.com/chawj1234)
+- **이메일**: chawj1234@gmail.com
 
 ## 감사의 말
 
