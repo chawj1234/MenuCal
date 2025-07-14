@@ -50,4 +50,31 @@
 "MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather";
 
 /* Location Permission */
-"This app uses location services to provide weather information for your current location." = "This app uses location services to provide weather information for your current location."; 
+"This app uses location services to provide weather information for your current location." = "This app uses location services to provide weather information for your current location.";
+
+/* System Settings Guide */
+"System Setup Required" = "System Setup Required";
+"Please follow these steps to configure your system before using the app" = "Please follow these steps to configure your system before using the app";
+"Please follow these steps to hide the system date:\n\n1. Open System Settings\n2. Go to Control Center\n3. Select Clock Options\n4. Set 'Show Date' to 'Never'\n\nThis will prevent duplicate dates in your menu bar." = "Please follow these steps to hide the system date:\n\n1. Open System Settings\n2. Go to Control Center\n3. Select Clock Options\n4. Set 'Show Date' to 'Never'\n\nThis will prevent duplicate dates in your menu bar.";
+"Open System Settings" = "Open System Settings";
+"Click the Apple logo (🍎) at the top-left corner of your Mac screen, then select System Settings." = "Click the Apple logo (🍎) at the top-left corner of your Mac screen, then select System Settings.";
+"Go to Control Center" = "Go to Control Center";
+"In the left menu, find and click Control Center." = "In the left menu, find and click Control Center.";
+"Select Clock Options" = "Select Clock Options";
+"Among the Control Center items, find and click Clock." = "Among the Control Center items, find and click Clock.";
+"Set Date View to Never" = "Set Date View to Never";
+"In 'Show Date' options, select 'Never' to hide the system date display." = "In 'Show Date' options, select 'Never' to hide the system date display.";
+"Done" = "Done";
+
+/* Onboarding */
+"Welcome to DayOne!" = "Welcome to DayOne!";
+"A simple and elegant calendar and weather app that lives in your menu bar." = "A simple and elegant calendar and weather app that lives in your menu bar.";
+"Real-time Weather" = "Real-time Weather";
+"Get current weather information for your location with beautiful icons and accurate data." = "Get current weather information for your location with beautiful icons and accurate data.";
+"Menu Bar Integration" = "Menu Bar Integration";
+"Look for the date in your menu bar. Left-click to open the app, right-click for quick options." = "Look for the date in your menu bar. Left-click to open the app, right-click for quick options.";
+"Easy to Use" = "Easy to Use";
+"Navigate through dates to see weather forecasts. The app automatically updates and stays out of your way." = "Navigate through dates to see weather forecasts. The app automatically updates and stays out of your way.";
+"Previous" = "Previous";
+"Next" = "Next";
+"Get Started" = "Get Started"; 

@@ -39,7 +39,18 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
         isLoading = true
         locationName = NSLocalizedString("Locating...", comment: "Location loading text")
         currentLocation = nil
-        locationManager.requestLocation()
+        
+        // 권한 확인 후 위치 요청
+        switch locationManager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.requestLocation()
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            showLocationError()
+        default:
+            showLocationError()
+        }
     }
     
     // MARK: - CLLocationManagerDelegate
@@ -57,15 +68,17 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.requestLocation()
-        case .denied, .restricted:
-            showLocationError()
-        default:
-            break
+        DispatchQueue.main.async {
+            switch status {
+            case .notDetermined:
+                self.locationManager.requestWhenInUseAuthorization()
+            case .authorizedWhenInUse, .authorizedAlways:
+                self.requestLocation()
+            case .denied, .restricted:
+                self.showLocationError()
+            default:
+                break
+            }
         }
     }
     

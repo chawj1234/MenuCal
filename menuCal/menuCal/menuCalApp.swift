@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
     var statusBarMenu: NSMenu?
+    var systemSettingsGuideWindow: NSWindow?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // 독 아이콘 숨기기
@@ -61,6 +62,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return event
         }
+        
+        // 첫 실행 시 온보딩 표시
+        checkAndShowOnboarding()
     }
     
     @objc func statusBarButtonClicked(_ sender: NSStatusBarButton) {
@@ -153,6 +157,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
+    
+    // 첫 실행 감지 및 온보딩 표시
+    private func checkAndShowOnboarding() {
+        if OnboardingManager.shouldShowOnboarding() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                OnboardingManager.showOnboarding()
+            }
+        }
+    }
+    
+    // 시스템 설정 가이드 (현재 사용 안함 - 온보딩에 통합됨)
+    /*
+    private func showSystemSettingsGuide() {
+        let systemGuideView = SystemSettingsGuideView(isPresented: Binding(
+            get: { self.systemSettingsGuideWindow != nil },
+            set: { isPresented in
+                if !isPresented {
+                    self.closeSystemSettingsGuide()
+                }
+            }
+        ))
+        
+        let hostingController = NSHostingController(rootView: systemGuideView)
+        
+        systemSettingsGuideWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 500, height: 600),
+            styleMask: [.titled, .closable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        systemSettingsGuideWindow?.title = NSLocalizedString("System Setup Required", comment: "System guide window title")
+        systemSettingsGuideWindow?.contentViewController = hostingController
+        systemSettingsGuideWindow?.center()
+        systemSettingsGuideWindow?.makeKeyAndOrderFront(nil)
+        systemSettingsGuideWindow?.isReleasedWhenClosed = false
+        
+        // 앱을 활성화하여 윈도우가 앞으로 나오도록 함
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    private func closeSystemSettingsGuide() {
+        systemSettingsGuideWindow?.close()
+        systemSettingsGuideWindow = nil
+        
+        // 시스템 가이드 완료 표시
+        UserDefaults.standard.set(true, forKey: "hasSeenSystemGuide")
+        
+        // 온보딩이 아직 보여지지 않았다면 보여주기
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        if !hasSeenOnboarding {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.showOnboarding()
+            }
+        }
+    }
+    */
+    
+
     
     // 로그인 시 자동 시작 활성화 (필요한 경우 주석 해제)
     /*
