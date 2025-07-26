@@ -435,46 +435,57 @@ struct CalendarView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
                 
-                // 날씨 상세 정보
-                HStack(spacing: 12) {
-                    if weatherManager.isLoading {
-                        ProgressView()
-                            .scaleEffect(0.7)
-                            .frame(width: 18, height: 18)
-                    } else if !weatherManager.weatherIcon.isEmpty {
-                        Image(systemName: weatherManager.weatherIcon)
-                            .foregroundColor(weatherManager.iconColor)
-                            .font(.system(size: 18))
-                            .frame(width: 20, height: 20)
+                Button(action: {
+                    // 날씨 앱 열기
+                    if let weatherAppURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.weather") {
+                        NSWorkspace.shared.open(weatherAppURL)
+                    } else {
+                        // 대체 방법: 앱 이름으로 열기
+                        NSWorkspace.shared.openApplication(at: URL(fileURLWithPath: "/System/Applications/Weather.app"),
+                                                           configuration: NSWorkspace.OpenConfiguration())
                     }
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        HStack(spacing: 8) {
-                            Text(weatherManager.temperature)
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.primary)
-                            
-                            Text(weatherManager.condition)
-                                .font(.system(size: 13))
-                                .foregroundColor(.secondary)
+                }) {
+                    // 날씨 상세 정보
+                    HStack(spacing: 12) {
+                        if weatherManager.isLoading {
+                            ProgressView()
+                                .scaleEffect(0.7)
+                                .frame(width: 18, height: 18)
+                        } else if !weatherManager.weatherIcon.isEmpty {
+                            Image(systemName: weatherManager.weatherIcon)
+                                .foregroundColor(weatherManager.iconColor)
+                                .font(.system(size: 18))
+                                .frame(width: 20, height: 20)
                         }
                         
-                        // Apple Weather 출처 표시
-                        HStack(spacing: 3) {
-                            Image(systemName: "info.circle")
-                                .font(.system(size: 8))
-                                .foregroundColor(.secondary.opacity(0.6))
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack(spacing: 8) {
+                                Text(weatherManager.temperature)
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                Text(weatherManager.condition)
+                                    .font(.system(size: 13))
+                                    .foregroundColor(.secondary)
+                            }
                             
-                            Text("Weather data by Apple Weather")
-                                .font(.system(size: 9))
-                                .foregroundColor(.secondary.opacity(0.6))
+                            HStack(spacing: 3) {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(.secondary.opacity(0.6))
+                                
+                                Text("Weather data by Apple Weather")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.secondary.opacity(0.6))
+                            }
+                            
                         }
+                        
+                        Spacer()
                     }
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 12)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
+                }.buttonStyle(PlainButtonStyle())
             }
         }
         .frame(width: 280, height: 340)
