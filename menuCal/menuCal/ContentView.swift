@@ -460,23 +460,15 @@ struct CalendarView: View {
                         }
                         
                         // Apple Weather 출처 표시
-                        Button(action: {
-                            if let url = URL(string: "https://weatherkit.apple.com/legal-attribution.html") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        }) {
-                            HStack(spacing: 3) {
-                                Image(systemName: "info.circle")
-                                    .font(.system(size: 8))
-                                    .foregroundColor(.secondary.opacity(0.6))
-                                
-                                Text("Weather data by Apple Weather")
-                                    .font(.system(size: 9))
-                                    .foregroundColor(.secondary.opacity(0.6))
-                            }
+                        HStack(spacing: 3) {
+                            Image(systemName: "info.circle")
+                                .font(.system(size: 8))
+                                .foregroundColor(.secondary.opacity(0.6))
+                            
+                            Text("Weather data by Apple Weather")
+                                .font(.system(size: 9))
+                                .foregroundColor(.secondary.opacity(0.6))
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .help("View Apple Weather legal attribution")
                     }
                     
                     Spacer()
