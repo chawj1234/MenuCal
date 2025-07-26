@@ -12,7 +12,7 @@ class OnboardingManager {
     
     // MARK: - 온보딩 상태 확인
     static func shouldShowOnboarding() -> Bool {
-        return !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        return !UserDefaults.standard.bool(forKey: "")
     }
     
     // MARK: - 온보딩 표시

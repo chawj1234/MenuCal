@@ -1,3 +1,8 @@
+/* Core App */
+"About DayOne!" = "DayOne! 정보";
+"Quit DayOne!" = "DayOne! 종료";
+"OK" = "확인";
+
 /* Location and Loading */
 "Locating..." = "위치 확인 중...";
 "Location Failed" = "위치 확인 실패";
@@ -41,10 +46,9 @@
 /* UI Actions */
 "Refresh" = "새로고침";
 
-/* Menu Items */
-"About DayOne!" = "DayOne! 정보";
-"Quit DayOne!" = "DayOne! 종료";
-"OK" = "확인";
+/* Calendar Actions */
+"Open Calendar" = "캘린더 열기";
+"Add Event" = "이벤트 추가";
 
 /* About Dialog */
 "DayOne! is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "DayOne!은 메뉴 바를 위한 간단한 달력 및 날씨 앱입니다.\n\n버전 1.0\n\n날씨 데이터는 Apple Weather에서 제공됩니다";
@@ -54,27 +58,6 @@
 
 /* System Settings Guide */
 "System Setup Required" = "시스템 설정이 필요합니다";
-"Please follow these steps to configure your system before using the app" = "앱을 사용하기 전에 다음 단계를 따라 시스템을 설정해 주세요";
 "Please follow these steps to hide the system date:\n\n1. Open System Settings\n2. Go to Control Center\n3. Select Clock Options\n4. Set 'Show Date' to 'Never'\n\nThis will prevent duplicate dates in your menu bar." = "시스템 날짜를 숨기기 위해 다음 단계를 따라주세요:\n\n1. 시스템 설정 열기\n2. 제어 센터로 이동\n3. 시계 옵션 선택\n4. '날짜 보기'에서 '보지 않음' 선택\n\n메뉴 바에 중복된 날짜가 표시되는 것을 방지합니다.";
 "Open System Settings" = "시스템 설정 열기";
-"Click the Apple logo (🍎) at the top-left corner of your Mac screen, then select System Settings." = "Mac에서 화면 왼쪽 상단의 Apple 로고(🍎)를 클릭한 뒤, 시스템 설정을 선택합니다.";
-"Go to Control Center" = "제어 센터로 이동";
-"In the left menu, find and click Control Center." = "왼쪽 메뉴에서 제어 센터를 찾아 클릭합니다.";
-"Select Clock Options" = "시계 옵션 선택";
-"Among the Control Center items, find and click Clock." = "제어 센터 항목 중 시계를 찾아 클릭합니다.";
-"Set Date View to Never" = "날짜 보기 - 보지 않음 선택";
-"In 'Show Date' options, select 'Never' to hide the system date display." = "'날짜 보기' 옵션에서 '보지 않음'을 선택해 주세요.";
-"Done" = "완료";
-
-/* Onboarding */
-"Welcome to DayOne!" = "DayOne!에 오신 것을 환영합니다!";
-"A simple and elegant calendar and weather app that lives in your menu bar." = "메뉴 바에서 사용할 수 있는 심플하고 우아한 달력 및 날씨 앱입니다.";
-"Real-time Weather" = "실시간 날씨";
-"Get current weather information for your location with beautiful icons and accurate data." = "아름다운 아이콘과 정확한 데이터로 현재 위치의 날씨 정보를 확인하세요.";
-"Menu Bar Integration" = "메뉴 바 통합";
-"Look for the date in your menu bar. Left-click to open the app, right-click for quick options." = "메뉴 바에서 날짜를 찾아보세요. 좌클릭으로 앱을 열고, 우클릭으로 빠른 옵션을 이용하세요.";
-"Easy to Use" = "사용하기 쉬운";
-"Navigate through dates to see weather forecasts. The app automatically updates and stays out of your way." = "날짜를 탐색하며 날씨 예보를 확인하세요. 앱이 자동으로 업데이트되어 방해받지 않고 사용할 수 있습니다.";
-"Previous" = "이전";
-"Next" = "다음";
-"Get Started" = "시작하기"; 
+"Done" = "완료"; 

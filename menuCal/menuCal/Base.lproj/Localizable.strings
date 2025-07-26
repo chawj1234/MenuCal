@@ -1,3 +1,8 @@
+/* Core App */
+"About DayOne!" = "About DayOne!";
+"Quit DayOne!" = "Quit DayOne!";
+"OK" = "OK";
+
 /* Location and Loading */
 "Locating..." = "Locating...";
 "Location Failed" = "Location Failed";
@@ -5,9 +10,9 @@
 "Current Location" = "Current Location";
 
 /* Weather Data */
-"Unable to fetch weather data" = "Unable to fetch weather data";
-"Forecast data is not available yet" = "Forecast data is not available yet";
-"We don't have data for past weather." = "We don't have data for past weather.";
+"Unable to load weather data." = "Unable to load weather data.";
+"The forecast isn't available yet." = "The forecast isn't available yet.";
+"Past weather data is not available." = "Past weather data is not available.";
 
 /* Weather Conditions */
 "Clear" = "Clear";
@@ -41,13 +46,18 @@
 /* UI Actions */
 "Refresh" = "Refresh";
 
-/* Menu Items */
-"About MenuCal" = "About MenuCal";
-"Quit MenuCal" = "Quit MenuCal";
-"OK" = "OK";
+/* Calendar Actions */
+"Open Calendar" = "Open Calendar";
+"Add Event" = "Add Event";
 
 /* About Dialog */
-"MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "MenuCal is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather";
+"DayOne! is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather" = "DayOne! is a simple calendar and weather app for your menu bar.\n\nVersion 1.0\n\nWeather data provided by Apple Weather";
 
 /* Location Permission */
-"This app uses location services to provide weather information for your current location." = "This app uses location services to provide weather information for your current location."; 
+"This app uses location services to provide weather information for your current location." = "This app uses location services to provide weather information for your current location.";
+
+/* System Settings Guide */
+"System Setup Required" = "System Setup Required";
+"Please follow these steps to hide the system date:\n\n1. Open System Settings\n2. Go to Control Center\n3. Select Clock Options\n4. Set 'Show Date' to 'Never'\n\nThis will prevent duplicate dates in your menu bar." = "Please follow these steps to hide the system date:\n\n1. Open System Settings\n2. Go to Control Center\n3. Select Clock Options\n4. Set 'Show Date' to 'Never'\n\nThis will prevent duplicate dates in your menu bar.";
+"Open System Settings" = "Open System Settings";
+"Done" = "Done"; 
