@@ -9,6 +9,7 @@ import SwiftUI
 import WeatherKit
 import CoreLocation
 import AppKit
+import EventKit
 
 @MainActor
 class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -330,10 +331,74 @@ class SimpleWeatherManager: NSObject, ObservableObject, CLLocationManagerDelegat
     }
 }
 
+@MainActor
+class CalendarManager: ObservableObject {
+    let eventStore = EKEventStore()  // private에서 internal로 변경
+    @Published var calendarAccessGranted = false
+    @Published var events: [EKEvent] = []
+    
+    func requestCalendarAccess(completion: (() -> Void)? = nil) {
+        if #available(macOS 14.0, *) {
+            Task {
+                do {
+                    let granted = try await eventStore.requestFullAccessToEvents()
+                    await MainActor.run {
+                        self.calendarAccessGranted = granted
+                        completion?()
+                    }
+                } catch {
+                    print("권한 요청 오류: \(error)")
+                    completion?()
+                }
+            }
+        } else {
+            eventStore.requestAccess(to: .event) { [weak self] granted, error in
+                DispatchQueue.main.async {
+                    self?.calendarAccessGranted = granted
+                    completion?()
+                }
+            }
+        }
+    }
+    
+    func fetchEvents(for date: Date) {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = eventStore.predicateForEvents(withStart: startOfDay, end: endOfDay, calendars: nil)
+        let foundEvents = eventStore.events(matching: predicate)
+        DispatchQueue.main.async {
+            self.events = foundEvents
+        }
+    }
+    
+    // 이벤트 추가 메서드 추가
+    func addEventToCalendar(for date: Date, title: String = "새 일정") {
+        guard calendarAccessGranted else {
+            requestCalendarAccess()
+            return
+        }
+        
+        let event = EKEvent(eventStore: eventStore)
+        event.title = title
+        event.startDate = date
+        event.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: date) ?? date
+        event.calendar = eventStore.defaultCalendarForNewEvents
+        
+        do {
+            try eventStore.save(event, span: .thisEvent)
+            print("이벤트가 성공적으로 추가되었습니다: \(title)")
+        } catch {
+            print("이벤트 추가 실패: \(error)")
+        }
+    }
+}
+
 struct CalendarView: View {
     @State private var selectedDate: Date
     @State private var displayDate: Date
     @StateObject private var weatherManager: SimpleWeatherManager
+    @StateObject private var calendarManager = CalendarManager()
     
     init() {
         let today = Date()
@@ -391,7 +456,8 @@ struct CalendarView: View {
                             date: date,
                             isSelected: Calendar.current.isDate(date, inSameDayAs: selectedDate),
                             isToday: Calendar.current.isDate(date, inSameDayAs: Date()),
-                            isCurrentMonth: Calendar.current.isDate(date, equalTo: displayDate, toGranularity: .month)
+                            isCurrentMonth: Calendar.current.isDate(date, equalTo: displayDate, toGranularity: .month),
+                            calendarManager: calendarManager
                         ) {
                             selectedDate = date
                             weatherManager.loadWeatherForDate(date)
@@ -544,6 +610,7 @@ struct DayView: View {
     let isSelected: Bool
     let isToday: Bool
     let isCurrentMonth: Bool
+    @ObservedObject var calendarManager: CalendarManager
     let action: () -> Void
     
     var body: some View {
@@ -561,7 +628,64 @@ struct DayView: View {
         .buttonStyle(PlainButtonStyle())
         .frame(width: 32, height: 32)
         .contentShape(Rectangle())
-//        .border(Color.gray)
+        .contextMenu {
+            if calendarManager.calendarAccessGranted {
+                if calendarManager.events.isEmpty {
+                    Text("일정 없음")
+                } else {
+                    ForEach(calendarManager.events, id: \.eventIdentifier) { event in
+                        Text(event.title)
+                    }
+                }
+                Divider()
+                Button("이벤트 추가") {
+                    calendarManager.addEventToCalendar(for: date)
+                }
+            } else {
+                Button("캘린더 권한 요청") {
+                    calendarManager.requestCalendarAccess {
+                        calendarManager.fetchEvents(for: date)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            if calendarManager.calendarAccessGranted {
+                calendarManager.fetchEvents(for: date)
+            }
+        }
+    }
+    
+    private func addEventToCalendar(for date: Date) {
+        guard calendarManager.calendarAccessGranted else {
+            calendarManager.requestCalendarAccess()
+            return
+        }
+        
+        // 새 이벤트 생성
+        let event = EKEvent(eventStore: calendarManager.eventStore)
+        event.title = "새 일정"
+        event.startDate = date
+        event.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: date) ?? date
+        event.calendar = calendarManager.eventStore.defaultCalendarForNewEvents
+        
+        do {
+            try calendarManager.eventStore.save(event, span: .thisEvent)
+            print("이벤트가 성공적으로 추가되었습니다")
+        } catch {
+            print("이벤트 추가 실패: \(error)")
+        }
+    }
+    
+    private func openCalendarApp(for date: Date) {
+        // Apple Calendar 앱을 직접 열기
+        if let calendarAppURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.iCal") {
+            NSWorkspace.shared.open(calendarAppURL)
+        } else {
+            // 대체 방법: 앱 이름으로 열기
+            NSWorkspace.shared.openApplication(at: URL(fileURLWithPath: "/System/Applications/Calendar.app"),
+                                             configuration: NSWorkspace.OpenConfiguration())
+        }
     }
     
     private var textColor: Color {

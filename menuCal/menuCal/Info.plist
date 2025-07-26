@@ -6,6 +6,8 @@
 	<string>This app uses location services to provide weather information for your current location.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>This app uses location services to provide weather information for your current location.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app needs access to your calendar to show events and add new events to your schedule.</string>
 	<key>TeamIdentifier</key>
 	<string>U9JJVCW82P</string>
 	<key>CFBundleName</key>
