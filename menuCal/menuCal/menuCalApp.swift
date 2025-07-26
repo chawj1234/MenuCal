@@ -121,14 +121,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let calendar = Calendar.current
                 let day = calendar.component(.day, from: Date())
                 
-                // 영어 서수 표현으로 변환 (1st, 2nd, 3rd, 4th, ...)
-                let numberFormatter = NumberFormatter()
-                numberFormatter.numberStyle = .ordinal
-                numberFormatter.locale = Locale(identifier: "en_US")
+                // 로케일에 따른 날짜 표현
+                let systemLanguage = Locale.current.languageCode ?? "en"
                 
-                let ordinalDay = numberFormatter.string(from: NSNumber(value: day)) ?? "\(day)"
-                
-                button.title = ordinalDay
+                if systemLanguage == "ko" {
+                    // 한국어: "26일" 형태
+                    button.title = "\(day)일"
+                } else {
+                    // 기타 언어: 서수 표현 (1st, 2nd, 3rd, ...)
+                    let numberFormatter = NumberFormatter()
+                    numberFormatter.numberStyle = .ordinal
+                    numberFormatter.locale = Locale.current
+                    
+                    let ordinalDay = numberFormatter.string(from: NSNumber(value: day)) ?? "\(day)"
+                    button.title = ordinalDay
+                }
             }
         }
     }
