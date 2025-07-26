@@ -1,9 +1,0 @@
-version: "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)"
-options: "a1ba515039ff1b53ea9379ccd8990311cdeacd8543b419474808eede142aa198"
-build_start_time: [1751466259, 248310000]
-build_end_time: [1751466263, 898059000]
-inputs:
-  ? "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/build/Build/Intermediates.noindex/DayOne!.build/Release/DayOne!.build/DerivedSources/GeneratedAssetSymbols.swift"
-  : [1751466254, 222779728]
-  "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/ContentView.swift": [1751465655, 408661441]
-  "/Users/chawj/Documents/RunSwift/MenuCal/menuCal/menuCal/menuCalApp.swift": [1751437856, 281183436]
